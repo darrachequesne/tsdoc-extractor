@@ -1,0 +1,30 @@
+{
+  "name": "tsdoc-extractor",
+  "version": "0.1.0",
+  "description": "Extract documentation from TypeScript files. Based on deno_doc.",
+  "author": "Damien ARRACHEQUESNE <damien.arrachequesne@gmail.com>",
+  "license": "ISC",
+  "keywords": [
+    "documentation",
+    "typescript",
+    "jsdoc"
+  ],
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "files": [
+    "src/"
+  ],
+  "scripts": {
+    "format:check": "prettier -c **/*.js **/*.ts",
+    "format:fix": "prettier -w **/*.js **/*.ts",
+    "test": "npm run format:check && npm run test:unit",
+    "test:unit": "nyc mocha"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.1.0",
+    "nyc": "^15.1.0",
+    "prettier": "^2.7.1"
+  }
+}
