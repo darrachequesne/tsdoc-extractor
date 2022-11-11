@@ -1,5 +1,6 @@
 import { instantiate } from "./deno_doc/deno_doc.generated.js";
 import { readFile } from "node:fs/promises";
+import { parse } from "node:path";
 
 /**
  * Asynchronously generate an array of documentation nodes for the supplied
@@ -25,7 +26,7 @@ export async function doc(specifier, options = {}) {
   const {
     load = defaultLoader,
     includeAll = false,
-    resolve,
+    resolve = defaultResolver,
     importMap,
   } = options;
   const wasm = await instantiate();
@@ -69,5 +70,28 @@ async function defaultLoader(specifier) {
         content,
       };
     }
+  }
+}
+
+function normalize(specifier) {
+  const path = parse(specifier);
+  switch (path.ext) {
+    case ".js":
+      return specifier.slice(0, -3) + ".ts";
+    case ".ts":
+      return specifier;
+    default:
+      return specifier + ".ts";
+  }
+}
+
+export function defaultResolver(specifier, referrer) {
+  const isRelativeImport = specifier.startsWith(".");
+  if (isRelativeImport) {
+    return new URL(normalize(specifier), referrer).toString();
+  } else {
+    // note: we could also point towards the dependency in the node_modules directory (or use the definitions from the
+    // "@types/<module>" package), but the resolution mechanism is a bit tricky
+    return new URL("dummy.js", import.meta.url).toString();
   }
 }

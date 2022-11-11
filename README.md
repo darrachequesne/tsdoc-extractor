@@ -72,3 +72,40 @@ console.log(nodes[0]);
 }
 */
 ```
+
+## Advanced
+
+### Resolve types from a dependency
+
+`product.ts`
+
+```ts
+import { Reference } from "my-dependency";
+
+/**
+ * This is a product
+ */
+export interface Product {
+    id: string;
+    ref: Reference;
+}
+```
+
+To resolve the types from a dependency, you need to provide a custom `resolve` method:
+
+```js
+import { doc, defaultResolver } from "tsdoc-extractor";
+
+const url = new URL("product.ts", import.meta.url).toString();
+const nodes = await doc(url, {
+  resolve: function (specifier, referrer) {
+    if (specifier === "my-dependency") {
+      return "file:///Projects/my-project/node_modules/my-dependency/dist/index.d.ts";
+      // or "file:///Projects/my-project/node_modules/my-dependency/index.ts";
+      // or "file:///Projects/my-project/node_modules/@types/my-dependency/index.d.ts";
+    } else {
+      return defaultResolver(specifier, referrer);
+    }
+  }
+});
+```

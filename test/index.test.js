@@ -19,4 +19,16 @@ describe("tsdoc-extractor", () => {
 
     assert.lengthOf(nodes, 48);
   });
+
+  it("should resolve imported modules", async () => {
+    const url = new URL("resolve.ts", import.meta.url).toString();
+    const nodes = await doc(url);
+
+    assert.lengthOf(nodes, 5);
+
+    const node = nodes[0];
+    assert.equal(node.kind, "interface");
+    assert.oneOf(node.name, ["Product", "OtherProduct"]);
+    assert.equal(node.declarationKind, "export");
+  });
 });
