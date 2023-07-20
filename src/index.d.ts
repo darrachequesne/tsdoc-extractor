@@ -64,3 +64,10 @@ export declare function doc(
   specifier: any,
   options?: DocOptions
 ): Promise<Array<DocNode>>;
+
+export declare function defaultResolver(
+  specifier: string,
+  referrer: string
+): string;
+
+export * from "./deno_doc/types";
