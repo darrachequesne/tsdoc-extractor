@@ -1,6 +1,6 @@
 {
   "name": "tsdoc-extractor",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Extract documentation from TypeScript files. Based on deno_doc.",
   "author": "Damien ARRACHEQUESNE <damien.arrachequesne@gmail.com>",
   "repository": {
